@@ -30,6 +30,8 @@ require('lazy').setup {
   { 'barrett-ruth/live-server.nvim', opts = {} },
   -- modular approach: using `require 'path/name'` will
   -- include a plugin definition from file lua/path/name.lua
+  --
+  -- { 'ThePrimeagen/vim-be-good', opts = {} },
 
   require 'custom/plugins/gitsigns',
 
@@ -43,9 +45,9 @@ require('lazy').setup {
 
   require 'custom/plugins/cmp',
 
-  -- require 'custom/plugins/tokyonight',
-  -- require 'custom/plugins/onedarkpro',
-  require 'custom.plugins.themes.rose-pine',
+  require 'custom/plugins/themes/tokyonight',
+  -- require 'custom/plugins/themes/onedarkpro',
+  -- require 'custom.plugins.themes.rose-pine',
 
   require 'custom/plugins/todo-comments',
 
@@ -74,6 +76,8 @@ require('lazy').setup {
   require 'custom.plugins.harpoon',
 
   require 'custom.plugins.ufo',
+
+  require 'custom.plugins.noice',
 
   -- require 'custom.plugins.lint',
   require 'custom.plugins.none-ls', -- it handles linting with code actions
