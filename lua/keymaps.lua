@@ -64,6 +64,16 @@ vim.keymap.set('i', '<C-c>', '<Esc>')
 -- Just do not press Q
 vim.keymap.set('n', 'Q', '<nop>')
 
+-- Close window
+vim.keymap.set('n', '<A-q>', ':q<CR>')
+
+-- Save buffer
+-- vim.keymap.set('n', '<C-s>', ':w<CR>')
+-- vim.keymap.set('n', '<C-s>', ':w<CR>')
+-- To avoid silly typos of :w and :q
+vim.cmd 'command W write'
+vim.cmd 'command Q quit'
+
 -- Exit INSERT mode
 vim.keymap.set('i', 'jk', '<ESC>')
 vim.keymap.set('i', 'kj', '<ESC>')
