@@ -43,8 +43,9 @@ require('lazy').setup {
 
   require 'custom/plugins/cmp',
 
-  require 'custom/plugins/tokyonight',
+  -- require 'custom/plugins/tokyonight',
   -- require 'custom/plugins/onedarkpro',
+  require 'custom.plugins.themes.rose-pine',
 
   require 'custom/plugins/todo-comments',
 
