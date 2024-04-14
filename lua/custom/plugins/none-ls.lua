@@ -1,7 +1,7 @@
 return {
   {
     'nvimtools/none-ls.nvim',
-    -- event = 'LazyFile',
+    event = 'VeryLazy',
     dependencies = { 'mason.nvim', 'davidmh/cspell.nvim' },
     opts = function(_, opts)
       local cspell = require 'cspell'

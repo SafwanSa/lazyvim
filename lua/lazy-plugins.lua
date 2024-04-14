@@ -77,7 +77,7 @@ require('lazy').setup {
 
   require 'custom.plugins.ufo',
 
-  require 'custom.plugins.noice',
+  -- require 'custom.plugins.noice',
 
   -- require 'custom.plugins.lint',
   require 'custom.plugins.none-ls', -- it handles linting with code actions
