@@ -65,7 +65,7 @@ vim.keymap.set('i', '<C-c>', '<Esc>')
 vim.keymap.set('n', 'Q', '<nop>')
 
 -- Close window
-vim.keymap.set('n', '<A-q>', ':q<CR>')
+-- vim.keymap.set('n', '<A-q>', ':q<CR>')
 
 -- Save buffer
 -- vim.keymap.set('n', '<C-s>', ':w<CR>')

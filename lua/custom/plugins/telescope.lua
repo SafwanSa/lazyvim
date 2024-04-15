@@ -89,6 +89,10 @@ return {
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sm', ':Telescope harpoon marks<CR>', { desc = '[S]earch harpoon [M]arks' })
 
+      -- Qlist jumps
+      vim.keymap.set('n', '<tab>', ':cnext<CR>', { desc = 'Go to next qlist item' })
+      vim.keymap.set('n', '<A-tab>', ':cprev<CR>', { desc = 'Go to previous qlist item' })
+
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
