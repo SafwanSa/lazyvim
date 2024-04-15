@@ -63,12 +63,12 @@ return {
         -- },
         pickers = {
           live_grep = {
-            file_ignore_patterns = { 'node_modules', '.git/', '.venv' },
+            file_ignore_patterns = { 'node_modules', '.git/', '.venv', 'static/', 'staticfiles/', 'dist/', 'www/' },
             no_ignore = true,
             hidden = true,
           },
           find_files = {
-            file_ignore_patterns = { 'node_modules', '.git/', '.venv' },
+            file_ignore_patterns = { 'node_modules', '.git/', '.venv', 'static/', 'staticfiles/', 'dist/', 'www/' },
             hidden = true,
             no_ignore = true,
           },
