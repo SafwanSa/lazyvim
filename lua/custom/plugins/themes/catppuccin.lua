@@ -43,6 +43,7 @@ return {
       custom_highlights = {},
       default_integrations = true,
       integrations = {
+        treesitter_context = false,
         cmp = true,
         gitsigns = true,
         nvimtree = true,
