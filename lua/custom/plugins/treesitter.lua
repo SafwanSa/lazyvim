@@ -14,13 +14,13 @@ return {
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
-      autotag = {
-        enable = true,
-        enable_rename = true,
-        enable_close = true,
-        enable_close_on_slash = true,
-        filetypes = { 'html', 'xml' },
-      },
+      -- autotag = {
+      --   enable = true,
+      --   enable_rename = true,
+      --   enable_close = true,
+      --   enable_close_on_slash = true,
+      --   filetypes = { 'html', 'xml' },
+      -- },
       rainbow = {
         enable = true,
         extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
