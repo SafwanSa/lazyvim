@@ -85,4 +85,6 @@ require('lazy').setup {
 
   -- Language specific
   require 'custom.plugins.venv-selector',
+
+  require 'custom.plugins.copilot',
 }
