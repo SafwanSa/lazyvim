@@ -167,7 +167,7 @@ return {
       local servers = {
         -- clangd = {},
         gopls = { handlers = handlers },
-        tsserver = { handlers = handlers },
+        ts_ls = { handlers = handlers },
         html = { handlers = handlers },
         angularls = { handlers = handlers },
         cssls = { handlers = handlers },

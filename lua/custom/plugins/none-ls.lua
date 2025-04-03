@@ -9,7 +9,7 @@ return {
       require('null-ls').setup {
         sources = {
           cspell.diagnostics.with {
-            filetypes = { 'python', 'typescript', 'javascript', 'json', 'html', 'css', 'scss', 'go' },
+            filetypes = { 'python', 'typescript', 'javascript', 'json', 'html', 'css', 'scss', 'go', 'typescriptreact' },
           },
           cspell.code_actions,
         },
