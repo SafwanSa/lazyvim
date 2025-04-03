@@ -47,28 +47,41 @@ return {
       },
       formatters = {
         prettier = {
-          prepend_args = {
-            '--arrow-parens=always',
-            '--bracket-spacing',
-            '--end-of-line=lf',
-            '--html-whitespace-sensitivity=css',
-            '--insert-pragma=false',
-            '--single-attribute-per-line=false',
-            '--bracket-same-line=false',
-            '--jsx-bracket-same-line=false',
-            '--jsx-single-quote=false',
-            '--print-width=80',
-            '--prose-wrap=preserve',
-            '--quote-props=as-needed',
-            '--require-pragma=false',
-            '--no-semi=false',
-            '--single-quote=false',
-            '--tab-width=2',
-            '--trailing-comma=es5',
-            '--use-tabs',
-            '--embedded-language-formatting=auto',
-            '--vue-indent-script-and-style=false',
-          },
+          command = 'prettier',
+          prepend_args = function(ctx)
+            -- Check if .prettierrc exists in the root directory
+            local root_dir = vim.fn.getcwd()
+            local prettier_config = vim.fn.glob(root_dir .. '/.prettierrc*')
+
+            if prettier_config ~= '' then
+              -- Use Prettier with the found config
+              return { '--config', prettier_config }
+            else
+              -- Use fallback Prettier options
+              return {
+                '--arrow-parens=always',
+                '--bracket-spacing',
+                '--end-of-line=lf',
+                '--html-whitespace-sensitivity=css',
+                '--insert-pragma=false',
+                '--single-attribute-per-line=false',
+                '--bracket-same-line=false',
+                '--jsx-bracket-same-line=false',
+                '--jsx-single-quote=false',
+                '--print-width=80',
+                '--prose-wrap=preserve',
+                '--quote-props=as-needed',
+                '--require-pragma=false',
+                '--no-semi=false',
+                '--single-quote=false',
+                '--tab-width=2',
+                '--trailing-comma=es5',
+                '--use-tabs',
+                '--embedded-language-formatting=auto',
+                '--vue-indent-script-and-style=false',
+              }
+            end
+          end,
         },
         autopep8 = {
           prepend_args = {
