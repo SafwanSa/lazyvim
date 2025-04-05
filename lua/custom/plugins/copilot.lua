@@ -1,5 +1,8 @@
 return {
   {
+    { 'github/copilot.vim' },
+  },
+  {
     -- Plugin configuration for CopilotChat.nvim
     'CopilotC-Nvim/CopilotChat.nvim',
     dependencies = {
