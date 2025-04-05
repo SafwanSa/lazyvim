@@ -87,6 +87,7 @@ require('lazy').setup {
   require 'custom.plugins.venv-selector',
 
   require 'custom.plugins.copilot',
+  require 'custom.plugins.copilot-chat',
 
   require 'custom.plugins.tmux',
 }
