@@ -57,7 +57,7 @@ return {
           -- Select the [n]ext item
           ['<Tab>'] = cmp.mapping.select_next_item(),
           -- Select the [p]revious item
-          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          -- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Scroll the documentation window [b]ack / [f]orward
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -96,7 +96,7 @@ return {
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
-          { name = 'copilot', group_index = 2 }, -- Add Copilot source
+          -- { name = 'copilot', group_index = 2 }, -- Add Copilot source
           { name = 'buffer' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
@@ -105,11 +105,11 @@ return {
       }
     end,
   },
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
-    end,
-  },
+  -- {
+  --   'zbirenbaum/copilot-cmp',
+  --   config = function()
+  --     require('copilot_cmp').setup()
+  --   end,
+  -- },
 }
 -- vim: ts=2 sts=2 sw=2 et

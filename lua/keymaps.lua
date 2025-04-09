@@ -79,7 +79,7 @@ vim.keymap.set('i', 'jk', '<ESC>')
 vim.keymap.set('i', 'kj', '<ESC>')
 
 -- Allows me to easily switch projects. MUST INSTALL tmux
-vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
+vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww ~/.config/tmux/sessionizer<CR>')
 
 -- Format a file
 -- vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
