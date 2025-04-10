@@ -7,10 +7,13 @@ return {
     lazy = false,
     config = function()
       require('nvim-tree').setup {
-        sort_by = 'case_sensitive',
-        filters = {
-          dotfiles = true,
+        hijack_directories = {
+          enable = false, -- Prevent nvim-tree from opening when entering a directory
         },
+        sort_by = 'case_sensitive',
+        -- filters = {
+        --   dotfiles = true,
+        -- },
         trash = {
           cmd = 'trash',
         },
