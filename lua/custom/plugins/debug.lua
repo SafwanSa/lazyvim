@@ -1,10 +1,3 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
 local js_based_languages = {
   'typescript',
   'javascript',
@@ -12,26 +5,17 @@ local js_based_languages = {
   'javascriptreact',
   'vue',
 }
-
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
     'leoluz/nvim-dap-go',
     'mfussenegger/nvim-dap-python',
-
+    'theHamsta/nvim-dap-virtual-text',
+    'rcarriga/cmp-dap',
     {
       'microsoft/vscode-js-debug',
       -- After install, build it and rename the dist directory to out
@@ -81,36 +65,35 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+    local cmp = require 'cmp'
+    local cmp_dap = require 'cmp_dap'
+    local dap_text = require 'nvim-dap-virtual-text'
+    local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
 
-    require('mason-nvim-dap').setup {
-      automatic_installation = true,
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
-      automatic_setup = true,
-
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
-
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
-      ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
-        -- 'delve'
-      },
-    }
-
-    -- Basic debugging keymaps, feel free to change to your liking!
-    vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    -- vim.keymap.set('n', '<leader>dc', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
-    vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
-    vim.keymap.set('n', '<leader>B', function()
+    -- Keymaps
+    vim.keymap.set({ 'n', 'v' }, '<leader>du', dapui.toggle, { desc = '[d]ap [u]i' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>de', dapui.eval, { desc = '[d]ap [e]val' })
+    vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = '[d]ap toggle [b]reakpoint' })
+    vim.keymap.set('n', '<leader>dr', dap.repl.toggle, { desc = '[d]ap [r]epl' })
+    vim.keymap.set('n', '<leader>dt', dap.terminate, { desc = '[d]ap [t]erminate' })
+    vim.keymap.set('n', '<leader>di', dap.step_into, { desc = '[d]ap [i]nto' })
+    vim.keymap.set('n', '<leader>do', dap.step_over, { desc = '[d]ap [o]ver' })
+    vim.keymap.set('n', '<leader>dq', dap.step_out, { desc = '[d]ap [q]uit' })
+    vim.keymap.set('n', '<leader>dh', dap.step_back, { desc = '[d]ap [h]istory' })
+    vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = '[d]ap [l]ast' })
+    vim.keymap.set('n', '<leader>dC', dap.run_to_cursor, { desc = '[d]ap [c]ursor' })
+    vim.keymap.set('n', '<leader>dg', dap.goto_, { desc = '[d]ap [g]oto' })
+    vim.keymap.set('n', '<leader>dj', dap.down, { desc = '[d]ap down' })
+    vim.keymap.set('n', '<leader>dk', dap.up, { desc = '[d]ap up' })
+    vim.keymap.set('n', '<leader>dp', dap.pause, { desc = '[d]ap [p]ause' })
+    vim.keymap.set('n', '<leader>ds', dap.session, { desc = '[d]ap [s]ession' })
+    vim.keymap.set('n', '<leader>dH', function()
+      local widgets = require 'dap.ui.widgets'
+      widgets.centered_float(widgets.frames)
+    end, { desc = '[d]ap [h]over' })
+    vim.keymap.set('n', '<leader>dB', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-    end, { desc = 'Debug: Set Breakpoint' })
-
+    end, { desc = '[dap] toggle condition [b]reakpoint' })
     vim.keymap.set('n', '<leader>dc', function()
       if vim.fn.filereadable '.vscode/launch.json' then
         local dap_vscode = require 'dap.ext.vscode'
@@ -121,7 +104,38 @@ return {
         })
       end
       dap.continue()
-    end, { desc = 'Debug: Start/Continue' })
+    end, { desc = '[d]ap [c]ontinue' })
+
+    -- Show and hide gitsigns blame when dap is active
+    dap_text.setup {
+      -- virt_text_win_col = 120,
+      -- clear_on_continue = true,
+      -- commented = true,
+    }
+    local hide_info = function()
+      vim.diagnostic.enable(false)
+      vim.api.nvim_command ':Gitsigns toggle_current_line_blame'
+    end
+
+    local show_info = function()
+      vim.diagnostic.enable()
+      vim.api.nvim_command ':Gitsigns toggle_current_line_blame'
+    end
+
+    dap.listeners.after.event_initialized['dapui_config'] = function()
+      hide_info()
+      dapui.open {}
+    end
+
+    dap.listeners.before.event_terminated['dapui_config'] = function()
+      show_info()
+      dapui.close {}
+    end
+
+    dap.listeners.before.event_exited['dapui_config'] = function()
+      show_info()
+      dapui.close {}
+    end
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -195,7 +209,7 @@ return {
       floating = {
         max_height = nil, -- These can be integers or a float between 0 and 1.
         max_width = nil, -- Floats will be treated as percentage of your screen.
-        border = 'single', -- Border style. Can be "single", "double" or "rounded"
+        border = 'double', -- Border style. Can be "single", "double" or "rounded"
         mappings = {
           close = { 'q', '<Esc>' },
         },
@@ -207,30 +221,71 @@ return {
         max_value_lines = 100, -- Can be integer or nil.
       },
     }
+    dap.set_log_level 'TRACE'
+    -- change Breakpoint icon
+    vim.fn.sign_define('DapBreakpoint', {
+      text = '🅑 ',
+      texthl = '',
+      linehl = '',
+      numhl = '',
+    })
 
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
-
-    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    -- dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
-    dap.listeners.before.event_terminated['dapui_config'] = function()
-      print 'terminalted'
-      dapui.close()
-    end
-    dap.listeners.before.event_exited['dapui_config'] = function()
-      print 'terminalted'
-      dapui.close()
-    end
-
-    -- Python debugger
-    dap.adapters.python = {
-      type = 'executable',
-      command = '~/.virtualenvs/debugpy/bin/python',
-      args = { '-m', 'debugpy.adapter' },
+    -- setup dap autocomplition
+    cmp.setup {
+      enabled = function()
+        return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or cmp_dap.is_dap_buffer()
+      end,
     }
+    cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {
+      sources = {
+        { name = 'dap' },
+      },
+    })
+
+    -- Setup dap for python
+    require('dap-python').setup(path)
+    -- Python debugger adapter
+    -- dap.adapters.python = {
+    --   type = 'executable',
+    --   command = '~/.virtualenvs/debugpy/bin/python',
+    --   args = { '-m', 'debugpy.adapter' },
+    -- }
+    -- Python debuggers
     dap.configurations.python = {
+      {
+        type = 'python',
+        request = 'launch',
+        name = 'Django',
+        program = vim.fn.getcwd() .. '/manage.py', -- NOTE: Adapt path to manage.py as needed
+        args = { 'runserver' },
+        django = true,
+        subProcess = true,
+      },
+      {
+        type = 'python',
+        request = 'attach',
+        connect = {
+          port = 5678,
+          host = 'localhost',
+        },
+        mode = 'remote',
+        name = 'Container Attach (with choose remote dir)',
+        cwd = vim.fn.getcwd(),
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(), -- Local project root
+            remoteRoot = '/app', -- Path inside the container
+          },
+        },
+        -- Add reconnection settings
+        reconnect = true,
+        -- Increase timeout to handle reconnection
+        subProcess = true,
+        autoReload = {
+          enable = false,
+        },
+        -- timeout = 5000,
+      },
       {
         -- The first three options are required by nvim-dap
         type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
@@ -244,26 +299,16 @@ return {
           -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
           local cwd = vim.fn.getcwd()
           if vim.fn.executable(cwd .. '/../venv/bin/python') == 1 then
-            print(cwd .. '/../venv/bin/python')
             return cwd .. '/../venv/bin/python'
           end
         end,
       },
     }
-    table.insert(dap.configurations.python, {
-      type = 'python',
-      request = 'launch',
-      name = 'Django',
-      program = vim.fn.getcwd() .. '/manage.py', -- NOTE: Adapt path to manage.py as needed
-      args = { 'runserver' },
-      django = true,
-      subProcess = true,
-    })
-    local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
-    require('dap-python').setup(path)
-    -- Install golang specific config
+
+    -- setup golang specific config
     require('dap-go').setup()
 
+    -- setup js/ts specific config
     for _, language in ipairs(js_based_languages) do
       dap.configurations[language] = {
         -- Debug single nodejs files
