@@ -7,9 +7,9 @@ return {
     lazy = false,
     config = function()
       require('nvim-tree').setup {
-        hijack_directories = {
-          enable = false, -- Prevent nvim-tree from opening when entering a directory
-        },
+        -- hijack_directories = {
+        --   enable = false, -- Prevent nvim-tree from opening when entering a directory
+        -- },
         sort_by = 'case_sensitive',
         -- filters = {
         --   dotfiles = true,

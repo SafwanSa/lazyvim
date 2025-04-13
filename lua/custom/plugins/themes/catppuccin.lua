@@ -8,10 +8,10 @@ return {
     name = 'catppuccin',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     opts = {
-      flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+      flavour = 'mocha', -- latte, frappe, macchiato, mocha
       background = { -- :h background
         light = 'latte',
-        dark = 'macchiato',
+        dark = 'mocha',
       },
       transparent_background = true, -- disables setting the background color.
       show_end_of_buffer = true, -- shows the '~' characters after the end of buffers

@@ -5,7 +5,7 @@ return {
     opts = {
       -- add any options here
       lsp = {
-        -- progress = { enabled = false },
+        progress = { enabled = false },
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
           ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
@@ -30,6 +30,14 @@ return {
         view_warn = 'notify', -- view for warnings
         view_history = 'messages', -- view for :messages
         view_search = 'virtualtext', -- view for search count messages. Set to `false` to disable
+      },
+      views = {
+        cmdline_popup = {
+          position = {
+            row = '50%',
+            col = '50%',
+          },
+        },
       },
     },
     dependencies = {
