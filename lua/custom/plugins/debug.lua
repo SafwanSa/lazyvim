@@ -287,6 +287,56 @@ return {
         -- timeout = 5000,
       },
       {
+        type = 'python',
+        request = 'attach',
+        connect = {
+          port = 5676,
+          host = 'localhost',
+        },
+        mode = 'remote',
+        name = 'CORE: Container Attach (with choose remote dir)',
+        cwd = vim.fn.getcwd(),
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(), -- Local project root
+            remoteRoot = '/app', -- Path inside the container
+          },
+        },
+        -- Add reconnection settings
+        reconnect = true,
+        -- Increase timeout to handle reconnection
+        subProcess = true,
+        autoReload = {
+          enable = false,
+        },
+        -- timeout = 5000,
+      },
+      {
+        type = 'python',
+        request = 'attach',
+        connect = {
+          port = 5677,
+          host = 'localhost',
+        },
+        mode = 'remote',
+        name = 'Inventory: Container Attach (with choose remote dir)',
+        cwd = vim.fn.getcwd(),
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(), -- Local project root
+            remoteRoot = '/app', -- Path inside the container
+          },
+        },
+        -- Add reconnection settings
+        reconnect = true,
+        -- Increase timeout to handle reconnection
+        subProcess = true,
+        autoReload = {
+          enable = false,
+        },
+        -- timeout = 5000,
+      },
+      {
         -- The first three options are required by nvim-dap
         type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
         request = 'launch',

@@ -172,17 +172,19 @@ return {
         angularls = { handlers = handlers },
         cssls = { handlers = handlers },
         terraformls = { handlers = handlers },
-        pyright = {
-          handlers = handlers,
-          settings = {
-            python = {
-              analysis = {
-                typeCheckingMode = 'off',
-                useLibraryCodeForTypes = true,
-              },
-            },
-          },
-        },
+        jedi_language_server = { handlers = handlers },
+        ruff = { handlers = handlers },
+        -- pyright = {
+        --   handlers = handlers,
+        --   settings = {
+        --     python = {
+        --       analysis = {
+        --         typeCheckingMode = 'off',
+        --         useLibraryCodeForTypes = true,
+        --       },
+        --     },
+        --   },
+        -- },
         lua_ls = {
           handlers = handlers,
           settings = {
